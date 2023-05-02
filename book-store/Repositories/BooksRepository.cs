@@ -1,6 +1,6 @@
 ﻿namespace book_store.Repositories
 {
-    public class BooksRepository
+    public class BooksRepository:IBooksRepository
     {
     }
 }
