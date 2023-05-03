@@ -1,6 +1,14 @@
-﻿namespace book_store.Repositories
+﻿using book_store.Models;
+using Microsoft.AspNetCore.JsonPatch;
+
+namespace book_store.Repositories
 {
-    public class IBooksRepository
+    public interface IBooksRepository
     {
+        Task<List<BookModel>> GetAllBooksAsync();
+        Task<BookModel> GetBookById(string id);
+
+        Task<string> AddBookAsync(NewBookModel newBookModel);
+
     }
 }
