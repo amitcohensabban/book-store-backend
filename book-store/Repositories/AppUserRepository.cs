@@ -77,6 +77,39 @@ namespace book_store.Repositories
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public async Task<string> DeleteUserAsync( string userId)
+        {
+            var user =await _context.Users.FindAsync(userId);
+            Console.WriteLine(user);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+                Console.WriteLine(user);
+                await _context.SaveChangesAsync();
+                return $"user delted. user id :{userId} ";
+            }
+            return null;
+        }
+
+        public async Task <IdentityResult> UpdatePrivateDetails(UpdateDetailsModel newDetails)
+        {
+            var user =await _userManager.FindByEmailAsync(newDetails.OldEmail);
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+            }
+            var passwordCorrect = await _userManager.CheckPasswordAsync(user, newDetails.OldPassword);
+            if (!passwordCorrect)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "Old password is incorrect." });
+            }
+             user.Email= newDetails.NewEmail;
+             user.UserName = newDetails.NewEmail;
+
+            var result = await _userManager.ChangePasswordAsync(user, newDetails.OldPassword, newDetails.NewPassword);
+             await _context.SaveChangesAsync();
+            return result;
+        }
 
     }
 }

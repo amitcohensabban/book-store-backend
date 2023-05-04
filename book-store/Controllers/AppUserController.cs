@@ -1,7 +1,9 @@
 ﻿using book_store.Models;
 using book_store.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace book_store.Controllers
 {
@@ -37,6 +39,29 @@ namespace book_store.Controllers
             }
             var tokenResponse = new { token = res };
             return Ok(tokenResponse);
+        }
+        [HttpDelete("delete")]
+        [Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> DeleteUser([FromQuery]string userId)
+        {
+            var res =  await _appUserRepository.DeleteUserAsync(userId);
+            if(res == null)
+            {
+                return BadRequest("user not found");
+            }
+            return Ok("user deleted");
+        }
+
+        [HttpPatch]
+        public async Task <IActionResult> UpddateDetails([FromBody] UpdateDetailsModel newDetails)
+        {
+            var result = await _appUserRepository.UpdatePrivateDetails(newDetails);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

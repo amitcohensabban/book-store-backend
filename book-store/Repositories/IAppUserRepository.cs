@@ -7,6 +7,8 @@ namespace book_store.Repositories
     {
         Task<IdentityResult> SignUp(SignupModel signupModel);
         Task<string> Login(LoginModel loginModel);
+        Task<string> DeleteUserAsync(string userId);
+        Task<IdentityResult> UpdatePrivateDetails(UpdateDetailsModel newDetails);
 
     }
 }
