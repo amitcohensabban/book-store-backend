@@ -10,9 +10,7 @@ namespace book_store.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-
         private readonly IBooksRepository _booksRepository;
-
         public BooksController(IBooksRepository booksRepository)
         {
             _booksRepository = booksRepository;
@@ -30,9 +28,15 @@ namespace book_store.Controllers
         }
 
         [HttpPost("")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddNewBook([FromBody] NewBookModel newBookModel)
         {
             var createdBookId = await _booksRepository.AddBookAsync(newBookModel);
+            if(createdBookId == "-1")
+            {
+                Console.WriteLine("its not work");
+                return BadRequest("not valid values");
+            }
             return Ok("added book");
         }
     }
