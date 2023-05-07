@@ -7,8 +7,7 @@ namespace book_store.Repositories
     {
         Task<List<BookModel>> GetAllBooksAsync();
         Task<BookModel> GetBookById(string id);
-
         Task<string> AddBookAsync(NewBookModel newBookModel);
-
+        Task<List<BookModel>> GetBooksForUserAsync(string userId);
     }
 }

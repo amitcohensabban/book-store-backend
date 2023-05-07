@@ -47,7 +47,20 @@ namespace book_store.Repositories
 
             return newBook.Id;
         }
+        public async Task<List<BookModel>> GetBooksForUserAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentNullException(nameof(userId));
 
+            var user = await _context.Users
+                .Include(u => u.Books)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                throw new ArgumentException($"User with Id {userId} does not exist");
+
+            return user.Books.ToList();
+        }
 
     }
 

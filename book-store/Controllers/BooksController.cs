@@ -39,5 +39,17 @@ namespace book_store.Controllers
             }
             return Ok("added book");
         }
+
+        [HttpGet("users/{userId}")]
+        public async Task<IActionResult> GetBooksForUser(string userId)
+        {
+            var userBooks = await _booksRepository.GetBooksForUserAsync(userId);
+            if (userBooks?.Count > 0)
+            {
+                return Ok(userBooks);
+            }
+            return NotFound();
+        }
+
     }
 }
