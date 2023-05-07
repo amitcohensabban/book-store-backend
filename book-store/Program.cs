@@ -52,6 +52,8 @@ namespace book_store
 
             builder.Services.AddTransient<IAppUserRepository, AppUserRepository>();
             builder.Services.AddTransient<IBooksRepository, BooksRepository>();
+            builder.Services.AddTransient<ICartRepository, CartRepository>();
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

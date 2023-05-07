@@ -7,6 +7,7 @@
         public string? Description { get; set; }
         public AuthorModel? Author { get; set; }
         public double? Price { get; set; }
+        public int Quantity { get; set; }
 
     }
 }

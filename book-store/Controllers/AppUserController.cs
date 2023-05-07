@@ -40,9 +40,9 @@ namespace book_store.Controllers
             var tokenResponse = new { token = res };
             return Ok(tokenResponse);
         }
+
         [HttpDelete("delete")]
         [Authorize(Roles = "Admin")]
-
         public async Task<IActionResult> DeleteUser([FromQuery]string userId)
         {
             var res =  await _appUserRepository.DeleteUserAsync(userId);
@@ -53,7 +53,8 @@ namespace book_store.Controllers
             return Ok("user deleted");
         }
 
-        [HttpPatch]
+        [HttpPatch ("updateDetails")]
+        [Authorize]
         public async Task <IActionResult> UpddateDetails([FromBody] UpdateDetailsModel newDetails)
         {
             var result = await _appUserRepository.UpdatePrivateDetails(newDetails);

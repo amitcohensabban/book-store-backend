@@ -14,6 +14,7 @@ namespace book_store.Data
         public DbSet<BookModel> Books { get; set; }
         public DbSet<AuthorModel> Authors { get; set; }
         public DbSet<AppUser> Users { get; set; }
+        public DbSet<CartModel> Carts { get; set; }
 
     }
 }

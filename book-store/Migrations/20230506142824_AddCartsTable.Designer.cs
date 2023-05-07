@@ -12,8 +12,8 @@ using book_store.Data;
 namespace book_store.Migrations
 {
     [DbContext(typeof(BookStoreContext))]
-    [Migration("20230504072250_thirdModal")]
-    partial class thirdModal
+    [Migration("20230506142824_AddCartsTable")]
+    partial class AddCartsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,8 +166,8 @@ namespace book_store.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("CartId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid?>("CartId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -258,8 +258,8 @@ namespace book_store.Migrations
                     b.Property<string>("AuthorId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CartModelId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid?>("CartModelId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -283,8 +283,9 @@ namespace book_store.Migrations
 
             modelBuilder.Entity("book_store.Models.CartModel", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("TotalBooks")
                         .HasColumnType("int");
@@ -297,7 +298,7 @@ namespace book_store.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CartModel");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
