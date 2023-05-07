@@ -59,5 +59,25 @@ namespace book_store.Controllers
             return cart;
         }
 
+        [HttpPost("checkout")]
+        public async Task<IActionResult> Checkout(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var cart = await _cartRepository.GetCartByUserIdAsync(user.Id);
+            if (cart == null || cart.Books.Count == 0)
+            {
+                return BadRequest("User cart is empty.");
+            }
+
+            await _cartRepository.CheckoutAsync(user, cart);
+
+            return Ok(user.Books);
+        }
+
     }
 }

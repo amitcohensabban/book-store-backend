@@ -11,17 +11,17 @@ namespace book_store.Repositories
         private readonly BookStoreContext _context;
         public CartRepository(BookStoreContext context)
         {
-            _context= context;
+            _context = context;
         }
 
         public async Task<CartModel> AddBookToCartAsync(AppUser user, BookModel book)
         {
-            if (user == null)            
+            if (user == null)
                 throw new ArgumentNullException(nameof(user));
-            
-            if (book == null)            
+
+            if (book == null)
                 throw new ArgumentNullException(nameof(book));
-            
+
             var cart = await _context.Carts.Include(c => c.Books)
                                              .FirstOrDefaultAsync(c => c.UserId == user.Id);
             if (cart == null)
@@ -36,7 +36,7 @@ namespace book_store.Repositories
                 book.Quantity++;
                 cart.Books.Add(book);
                 cart.TotalBooks++;
-                cart.TotalPrice += book.Price;                
+                cart.TotalPrice += book.Price;
                 _context.Carts.Add(cart);
             }
             else
@@ -49,7 +49,7 @@ namespace book_store.Repositories
                     cart.TotalPrice += book.Price;
                 }
                 else
-                {               
+                {
                     cart.TotalBooks++;
                     cart.TotalPrice += book.Price;
                     book.Quantity++;
@@ -98,5 +98,47 @@ namespace book_store.Repositories
             return cart;
         }
 
+        public async Task<CartModel> GetCartByUserIdAsync(string userId)
+        {
+            if (userId == null)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var cart = await _context.Carts
+                .Include(c => c.Books)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            return cart;
+        }
+
+        public async Task<IList<BookModel>> CheckoutAsync(AppUser user, CartModel cart)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            foreach (var book in cart.Books)
+            {
+                if (user.Books == null)
+                {
+                    user.Books = new List<BookModel>();
+                }
+
+                user.Books.Add(book);
+                book.Quantity--;
+            }
+
+            cart.TotalBooks = 0;
+            cart.TotalPrice = 0;
+            cart.Books.Clear();
+
+            await _context.SaveChangesAsync();
+
+            return user.Books;
+
+
+        }
     }
 }

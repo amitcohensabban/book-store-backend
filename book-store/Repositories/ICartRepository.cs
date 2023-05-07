@@ -6,5 +6,7 @@ namespace book_store.Repositories
     {
         Task<CartModel> AddBookToCartAsync(AppUser user, BookModel book);
         Task<CartModel> RemoveBookFromCartAsync(AppUser user, BookModel book);
+        Task<CartModel> GetCartByUserIdAsync(string userId);
+        Task<IList<BookModel>> CheckoutAsync(AppUser user, CartModel cart);
     }
 }
