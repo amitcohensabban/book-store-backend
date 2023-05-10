@@ -40,10 +40,11 @@ namespace book_store.Controllers
             return Ok("added book");
         }
 
-        [HttpGet("users/{userId}")]
-        public async Task<IActionResult> GetBooksForUser(string userId)
+        [HttpGet("users/{email}")]
+        [Authorize]
+        public async Task<IActionResult> GetBooksForUser(string email)
         {
-            var userBooks = await _booksRepository.GetBooksForUserAsync(userId);
+            var userBooks = await _booksRepository.GetBooksForUserAsync(email);
             if (userBooks?.Count > 0)
             {
                 return Ok(userBooks);

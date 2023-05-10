@@ -47,17 +47,17 @@ namespace book_store.Repositories
 
             return newBook.Id;
         }
-        public async Task<List<BookModel>> GetBooksForUserAsync(string userId)
+        public async Task<List<BookModel>> GetBooksForUserAsync(string email)
         {
-            if (string.IsNullOrEmpty(userId))
-                throw new ArgumentNullException(nameof(userId));
+            if (string.IsNullOrEmpty(email))
+                throw new ArgumentNullException(nameof(email));
 
             var user = await _context.Users
                 .Include(u => u.Books)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
-                throw new ArgumentException($"User with Id {userId} does not exist");
+                throw new ArgumentException($"User with Id {email} does not exist");
 
             return user.Books.ToList();
         }
