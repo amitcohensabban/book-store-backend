@@ -110,6 +110,13 @@ namespace book_store.Repositories
              await _context.SaveChangesAsync();
             return result;
         }
-
+        public async Task<bool> IsUserAdmin(string email)
+        {
+            if (email == null)
+                return false;
+            var user = await _userManager.FindByEmailAsync(email);
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.Contains("Admin");
+        }
     }
 }

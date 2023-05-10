@@ -64,5 +64,14 @@ namespace book_store.Controllers
             }
             return BadRequest(result);
         }
+
+        [HttpGet("Admin")]
+        public async Task <IActionResult> IsUserAdmin(string email)
+        {
+            if (email == null)
+                return BadRequest("user not found");
+            var res= await _appUserRepository.IsUserAdmin(email);
+            return Ok(res);
+        }
     }
 }
