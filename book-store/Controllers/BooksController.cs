@@ -37,7 +37,7 @@ namespace book_store.Controllers
                 Console.WriteLine("its not work");
                 return BadRequest("not valid values");
             }
-            return Ok("added book");
+            return Ok(new { message = "Book added" });
         }
 
         [HttpGet("users/{email}")]

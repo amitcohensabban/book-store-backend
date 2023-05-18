@@ -79,14 +79,16 @@ namespace book_store.Repositories
 
         public async Task<string> DeleteUserAsync( string userId)
         {
-            var user =await _context.Users.FindAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId);
             Console.WriteLine(user);
             if (user != null)
             {
-                await _userManager.DeleteAsync(user);
-                Console.WriteLine(user);
-                await _context.SaveChangesAsync();
-                return $"user delted. user id :{userId} ";
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    await _context.SaveChangesAsync();
+                    return $"User deleted. User ID: {userId}";
+                }
             }
             return null;
         }
@@ -118,5 +120,16 @@ namespace book_store.Repositories
             var roles = await _userManager.GetRolesAsync(user);
             return roles.Contains("Admin");
         }
+
+        public async Task<string> GetUserIdByEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return null;
+            }
+            return user.Id;
+        }
+
     }
 }

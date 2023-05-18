@@ -14,8 +14,8 @@ namespace book_store.Repositories
 
         public async Task<List<BookModel>> GetAllBooksAsync()
         {
-            var books = await _context.Books.ToListAsync();
-            return books.Distinct().ToList();
+            var books = await _context.Books.Include(b => b.Author).ToListAsync();
+            return books;
         }
         public async Task<BookModel> GetBookById(string id)
         {
@@ -29,13 +29,12 @@ namespace book_store.Repositories
 
             if (existingAuthor == null)
             {
-                // If the author doesn't exist, you may choose to handle this situation as per your requirement.
                 return "-1";
             }
-
+            var lastBook = await _context.Books.OrderBy(book => book.Id).LastAsync();
             var newBook = new BookModel
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = (int.Parse(lastBook.Id)+1).ToString(),
                 Title = newBookModel.Title,
                 Description = newBookModel.Description,
                 Price = newBookModel.Price,
@@ -53,7 +52,7 @@ namespace book_store.Repositories
                 throw new ArgumentNullException(nameof(email));
 
             var user = await _context.Users
-                .Include(u => u.Books)
+                .Include(u => u.Books).ThenInclude(b => b.Author)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)

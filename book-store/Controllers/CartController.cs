@@ -79,5 +79,18 @@ namespace book_store.Controllers
             return Ok(user.Books);
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<CartModel>> GetCartByUserId(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var cart = await _cartRepository.GetCartByUserIdAsync(user.Id);
+            return cart;
+        }
+
     }
 }

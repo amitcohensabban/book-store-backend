@@ -42,7 +42,7 @@ namespace book_store.Controllers
         }
 
         [HttpDelete("delete")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser([FromQuery]string userId)
         {
             var res =  await _appUserRepository.DeleteUserAsync(userId);
@@ -50,7 +50,7 @@ namespace book_store.Controllers
             {
                 return BadRequest("user not found");
             }
-            return Ok("user deleted");
+            return Ok(new { message = "user deleted" });
         }
 
         [HttpPatch ("updateDetails")]
@@ -73,5 +73,24 @@ namespace book_store.Controllers
             var res= await _appUserRepository.IsUserAdmin(email);
             return Ok(res);
         }
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetUserIdByEmail([FromQuery] string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return BadRequest("email cannot be empty");
+            }
+
+            var userId = await _appUserRepository.GetUserIdByEmail(email);
+            Console.WriteLine("user id= "+userId);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return NotFound("user not found");
+            }
+
+            return Ok(new { userId = userId });
+        }
+
     }
 }

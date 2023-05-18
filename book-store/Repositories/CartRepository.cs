@@ -89,9 +89,9 @@ namespace book_store.Repositories
             }
             else
             {
-                cart.Books.Remove(existingBook);
                 cart.TotalBooks--;
                 cart.TotalPrice -= book.Price;
+                cart.Books.Remove(existingBook);
             }
 
             await _context.SaveChangesAsync();
@@ -140,5 +140,7 @@ namespace book_store.Repositories
 
 
         }
+
+
     }
 }

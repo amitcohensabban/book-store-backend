@@ -11,5 +11,6 @@ namespace book_store.Repositories
         Task<string> DeleteUserAsync(string userId);
         Task<IdentityResult> UpdatePrivateDetails(UpdateDetailsModel newDetails);
         Task<bool> IsUserAdmin(string email);
+        Task<string> GetUserIdByEmail(string email);
     }
 }
